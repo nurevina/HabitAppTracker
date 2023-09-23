@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.habitapp.databinding.ActivityAuthenticationBinding
 import com.dicoding.habitapp.ui.ViewModelFactory
-import xyz.teamgravity.imageradiobutton.GravityRadioGroup
 
 class AuthenticationActivity : AppCompatActivity() {
 
@@ -24,18 +23,13 @@ class AuthenticationActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
 
-        binding.rgaction.setOnCheckedChangeListener(object :
-            GravityRadioGroup.OnCheckedChangeListener {
-            override fun onCheckedChanged(
-                radioGroup: View,
-                radioButton: View?,
-                checked: Boolean,
-                checkedId: Int
-            ) {
-                Toast.makeText(this@AuthenticationActivity, "$checkedId and ${radioButton?.id}", Toast.LENGTH_SHORT).show()
-            }
-
-        })
+        binding.rgaction.setOnCheckedChangeListener { radioGroup, radioButton, checked, checkedId ->
+            Toast.makeText(
+                this@AuthenticationActivity,
+                "$checkedId and ${radioButton?.id}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
         viewModel.onGetAuthUiType.observe(
             this,::onGetUiType
