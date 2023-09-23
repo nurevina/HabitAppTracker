@@ -11,7 +11,11 @@ import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class HabitRepository(private val habitDao: HabitDao, private val executor: ExecutorService) {
+class HabitRepository(
+    private val habitDao: HabitDao,
+    private val executor: ExecutorService,
+    private val userDao: UserDao
+) {
 
     companion object {
         const val PAGE_SIZE = 30
@@ -26,7 +30,8 @@ class HabitRepository(private val habitDao: HabitDao, private val executor: Exec
                     val database = HabitDatabase.getInstance(context)
                     instance = HabitRepository(
                         database.habitDao(),
-                        Executors.newSingleThreadExecutor()
+                        Executors.newSingleThreadExecutor(),
+                        database.userDao()
                     )
                 }
                 return instance as HabitRepository
@@ -52,10 +57,9 @@ class HabitRepository(private val habitDao: HabitDao, private val executor: Exec
         return habitDao.getHabitById(habitId)
     }
 
-    fun insertHabit(newHabit: Habit) : Long {
+    fun insertHabit(newHabit: Habit): Long {
         val habitData = Callable { habitDao.insertHabit(newHabit) }
         val executor = executor.submit(habitData)
-
         return executor.get()
     }
 

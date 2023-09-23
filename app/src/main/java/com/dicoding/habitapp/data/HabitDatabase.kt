@@ -16,10 +16,11 @@ import java.util.concurrent.Executors
 
 //TODO 3 : Define room database class and prepopulate database using JSON
 
-@Database(entities = [Habit::class], version = 1, exportSchema = false)
+@Database(entities = [Habit::class, User::class], version = 1, exportSchema = false)
 abstract class HabitDatabase : RoomDatabase() {
 
     abstract fun habitDao(): HabitDao
+    abstract fun userDao() : UserDao
 
     companion object {
 
